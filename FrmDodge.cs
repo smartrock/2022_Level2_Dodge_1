@@ -17,8 +17,11 @@ namespace _2022_Level2_Dodge
         Planet[] planet = new Planet[7];// declare space for an array of 7 objects called planet 
         Random yspeed = new Random();
         Spaceship spaceship = new Spaceship();
+
         bool left, right;
+        int score, lives;
         string move;
+
         public FrmDodge()
         {
             InitializeComponent();
@@ -72,18 +75,44 @@ namespace _2022_Level2_Dodge
             }
         }
 
+        private void FrmDodge_Load(object sender, EventArgs e)
+        {
+            // pass lives from LblLives Text property to lives variable
+            lives = int.Parse(LblLives.Text);
+        }
+
         private void TmrPlanet_Tick(object sender, EventArgs e)
         {
             for (int i = 0; i < 7; i++)
             {
                 planet[i].MovePlanet();
+                if (spaceship.spaceRec.IntersectsWith(planet[i].planetRec))
+                {
+                    //reset planet[i] back to top of panel
+                    planet[i].y = 30; // set  y value of planetRec
+                    lives -= 1;// lose a life
+                    LblLives.Text = lives.ToString();// display number of lives
+                    CheckLives();
+                }
                 //if a planet reaches the bottom of the Game Area reposition it at the top
                 if (planet[i].y >= PnlGame.Height)
                 {
+                    score += 1;//update the score
+                    LblScore.Text = score.ToString();// display score
                     planet[i].y = 30;
                 }
             }
             PnlGame.Invalidate();//makes the paint event fire to redraw the panel
+        }
+        private void CheckLives()
+        {
+            if (lives == 0)
+            {
+                TmrPlanet.Enabled = false;
+                TmrShip.Enabled = false;
+                MessageBox.Show("Game Over");
+
+            }
         }
     }
 }
