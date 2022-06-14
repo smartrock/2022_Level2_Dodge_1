@@ -20,9 +20,9 @@ namespace _2022_Level2_Dodge
         public Spaceship()
         {
             x = 10;
-            y = 360;
-            width = 40;
-            height = 40;
+            y = 350;
+            width = 60;
+            height = 50;
             spaceship = Properties.Resources.alien1;
             spaceRec = new Rectangle(x, y, width, height);
         }
